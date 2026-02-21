@@ -2,7 +2,7 @@ let links = [];
 
 async function shortenLink() {
   const input = document.getElementById("urlInput");
-  const url = input.value;
+  const url = input.value.trim();
 
   if (url === "") {
     document.getElementById("errorMsg").style.display = "block";
@@ -18,10 +18,8 @@ async function shortenLink() {
 
   const shortened = await response.text();
 
-  links.push({ original: url, shortened: shortened });
-
+  links.push({ original: url, shortened });
   input.value = "";
-
   addCard(url, shortened, links.length - 1);
 }
 
@@ -29,17 +27,19 @@ function addCard(original, shortened, index) {
   const list = document.getElementById("resultsList");
 
   const card = document.createElement("div");
-  card.style.cssText =
-    "background:white; padding:16px; margin-top:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;";
+  card.className =
+    "bg-white mt-3 rounded-lg overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between";
 
   card.innerHTML = `
-    <span>${original}</span>
-    <div style="display:flex; align-items:center; gap:16px;">
-      <span style="color:#2dd4bf;">${shortened}</span>
+    <span class="px-4 py-4 md:py-4 text-gray-800 border-b border-gray-200 md:border-b-0 truncate">
+      ${original}
+    </span>
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-3 px-4 py-4 md:py-0">
+      <span class="text-cyan-400 font-medium">${shortened}</span>
       <button
         id="copyBtn-${index}"
         onclick="copyLink('${shortened}', ${index})"
-        class="bg-cyan-400 hover:bg-cyan-200 text-white px-4 py-2 rounded-md cursor-pointer transition"
+        class="bg-cyan-400 hover:bg-cyan-200 text-white px-6 py-2 rounded-md cursor-pointer transition w-full md:w-auto text-center"
       >
         Copy
       </button>
